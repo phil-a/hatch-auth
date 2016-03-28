@@ -1,0 +1,3 @@
+rootProject.name = 'hatchAuth'
+
+include ':app'
