@@ -5,11 +5,13 @@ var {
   StyleSheet
 } = React;
 
+var Signin = require('./components/authentication/signin');
+
 module.exports = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text>Main Component Test</Text>
+        <Signin />
       </View>
     );
   }
