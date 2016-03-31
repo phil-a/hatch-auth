@@ -13,7 +13,8 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       username: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     };
   },
   render: function() {
@@ -35,7 +36,7 @@ module.exports = React.createClass({
         value={this.state.password}
         onChangeText={(text) => this.setState({password: text})}
         />
-
+        <Text style={styles.errorText}>{this.state.errorMessage}</Text>
         <Button text={'Sign In'} onPress={this.onPress}/>
       </View>
     );
@@ -43,7 +44,7 @@ module.exports = React.createClass({
   onPress: function() {
     Parse.User.logIn(this.state.username, this.state.password, {
       success: (user) => { console.log(user); },
-      error: (data, error) => { console.log(data, error); }
+      error: (data, error) => { this.setState({ errorMessage: error.message }); }
     });
   }
 });
@@ -67,5 +68,9 @@ var styles = StyleSheet.create({
     margin: 5,
     width: 200,
     alignSelf: 'center'
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red'
   }
 });
