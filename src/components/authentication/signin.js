@@ -47,7 +47,7 @@ module.exports = React.createClass({
   },
   onPress: function() {
     Parse.User.logIn(this.state.username, this.state.password, {
-      success: (user) => { console.log(user); },
+      success: (user) => { this.props.navigator.immediatelyResetRouteStack([ { name: 'dashboard' } ]); },
       error: (data, error) => { this.setState({ errorMessage: error.message }); }
     });
   }

@@ -7,9 +7,11 @@ var {
 var Parse = require('parse/react-native');
 var Signin = require('./components/authentication/signin');
 var Signup = require('./components/authentication/signup');
+var Dashboard = require('./components/dashboard/dashboard');
 var ROUTES = {
   signin: Signin,
-  signup: Signup
+  signup: Signup,
+  dashboard: Dashboard
 };
 
 module.exports = React.createClass({
