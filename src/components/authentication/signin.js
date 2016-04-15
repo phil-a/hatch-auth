@@ -3,7 +3,8 @@ var {
   View,
   Text,
   StyleSheet,
-  TextInput
+  TextInput,
+  Image
 } = React
 
 var Parse = require('parse/react-native');
@@ -19,7 +20,7 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      <View style={styles.container}>
+      <Image source={require('./dock.jpg')} style={styles.container} resizeMode="stretch">
         <Text>Sign In</Text>
 
         <Text style={styles.label}>Username:</Text>
@@ -39,7 +40,7 @@ module.exports = React.createClass({
         <Text style={styles.errorText}>{this.state.errorMessage}</Text>
         <Button text={'Sign In'} onPress={this.onPress}/>
         <Button text={'Create an account'} onPress={this.onSignupPress}/>
-      </View>
+      </Image>
     );
   },
   onSignupPress: function() {
@@ -57,7 +58,9 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: null,
+    height: null
   },
   label: {
     fontSize: 18,
