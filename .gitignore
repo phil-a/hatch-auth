@@ -1,3 +1,5 @@
+# Environment variables
+src/config/environment.js
 # OSX
 #
 .DS_Store

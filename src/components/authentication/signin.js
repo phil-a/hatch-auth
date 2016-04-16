@@ -22,24 +22,27 @@ module.exports = React.createClass({
     return (
       <Image source={require('./dock.jpg')} style={styles.container} resizeMode="stretch">
         <Text>Sign In</Text>
+          <View style={styles.formContainer}>
+          <Text style={styles.label}>Username:</Text>
+          <TextInput
+          style={styles.input}
+          value={this.state.username}
+          onChangeText={(text) => this.setState({username: text})}
+          />
 
-        <Text style={styles.label}>Username:</Text>
-        <TextInput
-        style={styles.input}
-        value={this.state.username}
-        onChangeText={(text) => this.setState({username: text})}
-        />
-
-        <Text style={styles.label}>Password:</Text>
-        <TextInput
-        secureTextEntry={true}
-        style={styles.input}
-        value={this.state.password}
-        onChangeText={(text) => this.setState({password: text})}
-        />
+          <Text style={styles.label}>Password:</Text>
+          <TextInput
+          secureTextEntry={true}
+          style={styles.input}
+          value={this.state.password}
+          onChangeText={(text) => this.setState({password: text})}
+          />
+        </View>
         <Text style={styles.errorText}>{this.state.errorMessage}</Text>
-        <Button text={'Sign In'} onPress={this.onPress}/>
-        <Button text={'Create an account'} onPress={this.onSignupPress}/>
+        <View style={styles.buttonContainer}>
+          <Button text={'Sign In'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onPress}/>
+          <Button text={'Create an account'} underlayColor={'rgba(0,100,200,0.25)'} onPress={this.onSignupPress}/>
+        </View>
       </Image>
     );
   },
@@ -79,5 +82,14 @@ var styles = StyleSheet.create({
   errorText: {
     fontSize: 18,
     color: 'red'
+  },
+  buttonContainer: {
+    flex: 1,
+    alignSelf: 'stretch',
+    padding: 30
+  },
+  formContainer: {
+    flex: 3,
+    justifyContent: 'center'
   }
 });
