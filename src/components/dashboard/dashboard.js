@@ -3,7 +3,8 @@ var React = require('react-native');
 var {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  Image
 } = React;
 
 var Parse = require('parse/react-native');
@@ -26,9 +27,9 @@ module.exports = React.createClass({
 
     var username = this.state.user.get('username');
     return (
-      <View style={styles.container}>
+      <Image source={require('./talltrees.jpg')} style={styles.container} resizeMode="cover">
         <Text>Welcome back, {username}</Text>
-      </View>
+      </Image>
     );
   }
 });
@@ -37,6 +38,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: null,
+    height: null
   }
 });

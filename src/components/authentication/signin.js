@@ -20,25 +20,26 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      <Image source={require('./dock.jpg')} style={styles.container} resizeMode="stretch">
+      <Image source={require('./dock.jpg')} style={styles.container} resizeMode="cover">
+        <Text style={styles.errorText}>{this.state.errorMessage}</Text>
         <Text>Sign In</Text>
           <View style={styles.formContainer}>
-          <Text style={styles.label}>Username:</Text>
-          <TextInput
-          style={styles.input}
-          value={this.state.username}
-          onChangeText={(text) => this.setState({username: text})}
-          />
+            <Text style={styles.label}>Email:</Text>
+            <TextInput
+            style={styles.input}
+            keyboardType={'email-address'}
+            value={this.state.username}
+            onChangeText={(text) => this.setState({username: text.trim().toLowerCase()})}
+            />
 
-          <Text style={styles.label}>Password:</Text>
-          <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          value={this.state.password}
-          onChangeText={(text) => this.setState({password: text})}
-          />
-        </View>
-        <Text style={styles.errorText}>{this.state.errorMessage}</Text>
+            <Text style={styles.label}>Password:</Text>
+            <TextInput
+            secureTextEntry={true}
+            style={styles.input}
+            value={this.state.password}
+            onChangeText={(text) => this.setState({password: text})}
+            />
+          </View>
         <View style={styles.buttonContainer}>
           <Button text={'Sign In'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onPress}/>
           <Button text={'Create an account'} underlayColor={'rgba(0,100,200,0.25)'} onPress={this.onSignupPress}/>

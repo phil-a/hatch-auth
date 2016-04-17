@@ -3,7 +3,8 @@ var {
   Text,
   View,
   StyleSheet,
-  TextInput
+  TextInput,
+  Image
 } = React;
 
 var Parse = require('parse/react-native');
@@ -20,11 +21,12 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      <View style={styles.container}>
+      <Image source={require('./dock.jpg')} style={styles.container} resizeMode="stretch">
+        <Text style={styles.errorText}>{this.state.errorMessage}</Text>
         <Text>Sign Up</Text>
-
-        <Text style={styles.label}>Username:</Text>
-        <TextInput
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>Email:</Text>
+          <TextInput
           value={this.state.username}
           onChangeText={(text) => this.setState({username: text})}
           style={styles.input} />
@@ -42,10 +44,12 @@ module.exports = React.createClass({
             value={this.state.passwordConfirmation}
             onChangeText={(text) => this.setState({passwordConfirmation: text})}
             style={styles.input} />
-          <Text style={styles.errorText}>{this.state.errorMessage}</Text>
-          <Button text={'Signup'} onPress={this.onSignupPress} />
-          <Button text={'I have an account'} onPress={this.onSigninPress} />
-      </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button text={'Signup'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onSignupPress} />
+          <Button text={'I have an account'} underlayColor={'rgba(0,100,200,0.25)'} onPress={this.onSigninPress} />
+        </View>
+      </Image>
     );
   },
   onSignupPress: function() {
@@ -54,9 +58,9 @@ module.exports = React.createClass({
     }
 
     var user = new Parse.User();
-    user.set('username', this.state.username);
+    user.set('username', this.state.username.trim().toLowerCase());
     user.set('password', this.state.password);
-
+    user.setEmail(this.state.username.trim().toLowerCase());
     user.signUp(null, {
       success: (user) => { this.props.navigator.immediatelyResetRouteStack([ { name: 'dashboard' } ]); },
       error: (user, error) => { this.setState({ errorMessage: error.message }); }
@@ -72,7 +76,8 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white'
+    width: null,
+    height: null
   },
   label: {
     fontSize: 18,
@@ -91,5 +96,14 @@ var styles = StyleSheet.create({
   errorText: {
     fontSize: 18,
     color: 'red'
+  },
+  buttonContainer: {
+    flex: 1,
+    alignSelf: 'stretch',
+    padding: 30
+  },
+  formContainer: {
+    flex: 3,
+    justifyContent: 'center'
   }
 });
