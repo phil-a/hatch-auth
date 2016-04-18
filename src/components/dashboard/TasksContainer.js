@@ -6,20 +6,56 @@ var {
   StyleSheet,
   ScrollView
 } = React;
+var Environment = require('../../config/environment')
+var Parse = require('parse/react-native');
 
 import TaskItem from './TaskItem';
 
 module.exports = React.createClass({
+  getInitialState: function() {
+    return {
+      tasks: [],
+      loaded: false
+    }
+  },
+  componentDidMount: function() {
+    fetch("https://parseapi.back4app.com/classes/Task", {
+      headers: {
+        "X-Parse-Application-Id": Environment.PARSE_APP_ID,
+        "X-Parse-REST-API-Key": Environment.PARSE_RESTAPI_KEY
+      }
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          tasks: responseData.results,
+          loaded: true,
+        })
+        console.log("success");
+        console.log(this.state.tasks);
+      })
+      .catch(function(error) {
+        console.log("error");
+        console.log(error)
+      })
+     .done();
+  },
   render: function() {
     return (
       <ScrollView tabLabel="ios-checkmark" style={styles.tabView}>
-        <TaskItem text="Kitten" desc="This is a cute kitten." imageURL="https://lh6.ggpht.com/sw_iT7GZASdAYeiecsZEHJE-EgDhdK2rCWUzZOJS0OFiGpoi9qn8iMH2nuXHgWg2PA=h900"/>
-        <TaskItem text="Puppy" desc="This is a lazy dog." imageURL="http://indiabright.com/wp-content/uploads/2015/12/cute-puppy.jpg"/>
-        <TaskItem text="Piglet" desc="This is a happy pig." imageURL="http://s2.favim.com/orig/34/carolina-wang-cute-little-mini-pig-Favim.com-274154.jpg"/>
-        <TaskItem text="Fennec" desc="This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox. This is a sly fox." imageURL="http://cdn.attackofthecute.com/October-05-2012-02-00-34-nsbdnbfndbfd.jpeg"/>
+          {
+            this.state.loaded
+            ?
+            this.state.tasks.map(function(item, idx){
+              return <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL}/>
+            })
+            :
+            <TaskItem text="Please wait.." desc="We are retrieving your tasks" imageURL="https://i.ytimg.com/vi/pzPxhaYQQK8/maxresdefault.jpg" />
+          }
       </ScrollView>
     );
-  }
+  },
+
 });
 
 var styles = StyleSheet.create({

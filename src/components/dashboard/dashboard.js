@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
       <View style={styles.container}>
             <ScrollableTabView initialPage={0} renderTabBar={() => <FacebookTabBar />}>
-              <TasksContainer tabLabel="ios-checkmark-outline" />
+              <TasksContainer userId={this.state.user.id} tabLabel="ios-checkmark-outline" />
               <ScrollView tabLabel="ios-search" style={styles.tabView}>
                 <View style={styles.card}>
                   <Text>Friends</Text>
