@@ -15,6 +15,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       tasks: [],
+      navigator: '',
       loaded: false
     }
   },
@@ -29,28 +30,31 @@ module.exports = React.createClass({
       .then((responseData) => {
         this.setState({
           tasks: responseData.results,
+          navigator: this.props.navigator,
           loaded: true,
-        })
-        console.log("success");
-        console.log(this.state.tasks);
+        });
       })
       .catch(function(error) {
-        console.log("error");
         console.log(error)
       })
      .done();
   },
   render: function() {
+    var _this = this;
     return (
       <ScrollView tabLabel="ios-checkmark" style={styles.tabView}>
           {
             this.state.loaded
             ?
             this.state.tasks.map(function(item, idx){
-              return <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL}/>
+              return (
+                <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.state.navigator}/>
+              );
             })
             :
-            <TaskItem text="Please wait.." desc="We are retrieving your tasks" imageURL="https://i.ytimg.com/vi/pzPxhaYQQK8/maxresdefault.jpg" />
+            <View>
+            <TaskItem text="Please wait.." desc="We are retrieving your tasks" imageURL="https://i.ytimg.com/vi/pzPxhaYQQK8/maxresdefault.jpg" navigator={this.state.navigator}/>
+            </View>
           }
       </ScrollView>
     );

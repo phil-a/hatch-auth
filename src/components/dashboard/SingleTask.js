@@ -3,28 +3,24 @@ var {
   View,
   Text,
   Image,
-  TouchableOpacity,
   StyleSheet
 } = React;
 
+var Button = require('../common/button');
+
 module.exports = React.createClass({
-  _onPressTask(){
-    this.props.navigator.push({
-      name: 'singletask',
-      key: this.props.idx,
-      text: this.props.text,
-      desc: this.props.desc,
-      imageURL: this.props.imageURL
-    });
+  _onPressBack(){
+    this.props.navigator.pop();
   },
   render: function() {
     return (
-      <TouchableOpacity onPress={() => this._onPressTask()}>
-        <Image source={{uri: this.props.imageURL}} resizeMode='cover' style={styles.card}>
-          <View style={styles.header}><Text style={styles.headerText}>{this.props.text}</Text></View>
-          <View style={styles.body}><Text style={styles.bodyText}>{this.props.desc}</Text></View>
+      <View>
+        <Image source={{uri: this.props.route.imageURL}} resizeMode='cover' style={styles.card}>
+          <View style={styles.header}><Text style={styles.headerText}>{this.props.route.text}</Text></View>
+          <View style={styles.body}><Text style={styles.bodyText}>{this.props.route.desc}</Text></View>
         </Image>
-      </TouchableOpacity>
+        <Button text={'Go back'} underlayColor={'rgba(200,0,0,0.25)'} onPress={this._onPressBack}/>
+      </View>
     );
   }
 });

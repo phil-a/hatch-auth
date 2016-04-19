@@ -9,10 +9,13 @@ var Parse = require('parse/react-native');
 var Signin = require('./components/authentication/signin');
 var Signup = require('./components/authentication/signup');
 var Dashboard = require('./components/dashboard/dashboard');
+var SingleTask = require('./components/dashboard/SingleTask');
+
 var ROUTES = {
   signin: Signin,
   signup: Signup,
-  dashboard: Dashboard
+  dashboard: Dashboard,
+  singletask: SingleTask
 };
 
 module.exports = React.createClass({

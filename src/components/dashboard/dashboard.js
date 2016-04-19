@@ -32,30 +32,34 @@ module.exports = React.createClass({
     return (
 
       <View style={styles.container}>
-            <ScrollableTabView initialPage={0} renderTabBar={() => <FacebookTabBar />}>
-              <TasksContainer userId={this.state.user.id} tabLabel="ios-checkmark-outline" />
-              <ScrollView tabLabel="ios-search" style={styles.tabView}>
-                <View style={styles.card}>
-                  <Text>Friends</Text>
-                </View>
-              </ScrollView>
-              <ScrollView tabLabel="ios-chatboxes-outline" style={styles.tabView}>
-                <View style={styles.card}>
-                  <Text>Messenger</Text>
-                </View>
-              </ScrollView>
-              <ScrollView tabLabel="ios-world-outline" style={styles.tabView}>
-                <View style={styles.card}>
-                  <Text>Notifications</Text>
-                </View>
-              </ScrollView>
-              <ScrollView tabLabel="ios-cog-outline" style={styles.tabView}>
-                <View style={styles.card}>
-                  <Text>Other nav</Text>
-                </View>
-              </ScrollView>
-            </ScrollableTabView>
-          </View>
+        <ScrollableTabView initialPage={0} renderTabBar={() => <FacebookTabBar />}>
+          <TasksContainer
+            userId={this.state.user.id}
+            tabLabel="ios-checkmark-outline"
+            navigator={this.props.navigator}
+          />
+          <ScrollView tabLabel="ios-search" style={styles.tabView}>
+            <View style={styles.card}>
+              <Text>Friends</Text>
+            </View>
+          </ScrollView>
+          <ScrollView tabLabel="ios-chatboxes-outline" style={styles.tabView}>
+            <View style={styles.card}>
+              <Text>Messenger</Text>
+            </View>
+          </ScrollView>
+          <ScrollView tabLabel="ios-world-outline" style={styles.tabView}>
+            <View style={styles.card}>
+              <Text>Notifications</Text>
+            </View>
+          </ScrollView>
+          <ScrollView tabLabel="ios-cog-outline" style={styles.tabView}>
+            <View style={styles.card}>
+              <Text>Other nav</Text>
+            </View>
+          </ScrollView>
+        </ScrollableTabView>
+      </View>
 
     );
   }
