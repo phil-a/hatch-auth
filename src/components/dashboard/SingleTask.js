@@ -6,20 +6,42 @@ var {
   StyleSheet
 } = React;
 
-var Button = require('../common/button');
+var NavigationBar = require('react-native-navbar');
 
 module.exports = React.createClass({
-  _onPressBack(){
-    this.props.navigator.pop();
-  },
+
   render: function() {
+    var _this = this;
+
+    var leftButtonConfig = {
+      title: 'Back',
+      handler: function onBack() {
+        _this.props.navigator.pop();
+      }
+    };
+
+    var rightButtonConfig = {
+      title: 'Edit',
+      handler: function onNext() {
+        alert('edit mode!');
+      }
+    };
+
+    var titleConfig = {
+      title: this.props.route.text,
+    };
+
     return (
       <View>
+        <NavigationBar
+          title={titleConfig}
+          rightButton={rightButtonConfig}
+          leftButton={leftButtonConfig}
+        />
         <Image source={{uri: this.props.route.imageURL}} resizeMode='cover' style={styles.card}>
           <View style={styles.header}><Text style={styles.headerText}>{this.props.route.text}</Text></View>
           <View style={styles.body}><Text style={styles.bodyText}>{this.props.route.desc}</Text></View>
         </Image>
-        <Button text={'Go back'} underlayColor={'rgba(200,0,0,0.25)'} onPress={this._onPressBack}/>
       </View>
     );
   }
