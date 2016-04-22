@@ -12,6 +12,7 @@ module.exports = React.createClass({
     this.props.navigator.push({
       name: 'singletask',
       key: this.props.idx,
+      taskRef: this.props.taskRef,
       text: this.props.text,
       desc: this.props.desc,
       imageURL: this.props.imageURL
@@ -24,6 +25,7 @@ module.exports = React.createClass({
           <View style={styles.header}><Text style={styles.headerText}>{this.props.text}</Text></View>
           <View style={styles.body}><Text style={styles.bodyText}>{this.props.desc}</Text></View>
         </Image>
+        {console.log(this.props.taskRef)}
       </TouchableOpacity>
     );
   }

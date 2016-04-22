@@ -19,6 +19,9 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function() {
+    this.getTasks();
+  },
+  getTasks: function() {
     var _this = this;
     var user = Parse.User.current();
     var Task = Parse.Object.extend("Task");
@@ -28,6 +31,9 @@ module.exports = React.createClass({
       success: function(results){
         var tasks = [];
         results.forEach (function(task){
+          // var Subtask = Parse.Object.extend("Subtask");
+          // var b1 = new Subtask({"name":"Meow", "desc":"Meow description","taskId":task});
+          // b1.save();
           tasks.push(task.toJSON());
         });
         _this.setState({
@@ -49,7 +55,7 @@ module.exports = React.createClass({
             ?
             this.state.tasks.map(function(item, idx){
               return (
-                <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.props.navigator}/>
+                <TaskItem key={idx} taskRef={item} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.props.navigator}/>
               );
             })
             :
