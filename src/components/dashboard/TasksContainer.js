@@ -15,29 +15,30 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       tasks: [],
-      navigator: '',
       loaded: false
     }
   },
   componentDidMount: function() {
-    fetch("https://parseapi.back4app.com/classes/Task", {
-      headers: {
-        "X-Parse-Application-Id": Environment.PARSE_APP_ID,
-        "X-Parse-REST-API-Key": Environment.PARSE_RESTAPI_KEY
-      }
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({
-          tasks: responseData.results,
-          navigator: this.props.navigator,
+    var _this = this;
+    var user = Parse.User.current();
+    var Task = Parse.Object.extend("Task");
+    var q = new Parse.Query(Task);
+    q.equalTo("userId",user);
+    q.find({
+      success: function(results){
+        var tasks = [];
+        results.forEach (function(task){
+          tasks.push(task.toJSON());
+        });
+        _this.setState({
+          tasks: tasks,
           loaded: true,
         });
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
-     .done();
+      },
+      error: function(results, error) {
+        console.log(error.message);
+      }
+    });
   },
   render: function() {
     var _this = this;
@@ -48,12 +49,12 @@ module.exports = React.createClass({
             ?
             this.state.tasks.map(function(item, idx){
               return (
-                <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.state.navigator}/>
+                <TaskItem key={idx} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.props.navigator}/>
               );
             })
             :
             <View>
-            <TaskItem text="Please wait.." desc="We are retrieving your tasks" imageURL="https://i.ytimg.com/vi/pzPxhaYQQK8/maxresdefault.jpg" navigator={this.state.navigator}/>
+              <TaskItem text="Please wait.." desc="We are retrieving your tasks" imageURL="https://i.ytimg.com/vi/pzPxhaYQQK8/maxresdefault.jpg" navigator={this.props.navigator}/>
             </View>
           }
       </ScrollView>
