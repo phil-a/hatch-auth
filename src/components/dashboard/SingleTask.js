@@ -5,6 +5,7 @@ var {
   Image,
   ListView,
   ScrollView,
+  Component,
   TouchableOpacity,
   TouchableHighlight,
   StyleSheet
@@ -13,6 +14,8 @@ var {
 var NavigationBar = require('react-native-navbar');
 import { SwipeListView } from 'react-native-swipe-list-view';
 var Parse = require('parse/react-native');
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 module.exports = React.createClass({
 
@@ -84,15 +87,16 @@ module.exports = React.createClass({
     };
 
     return (
-      <View>
+      <View style={styles.container}>
         <NavigationBar
           title={titleConfig}
           rightButton={rightButtonConfig}
           leftButton={leftButtonConfig}
         />
+        <View style={styles.body}>
         <Image source={{uri: this.props.route.imageURL}} resizeMode='cover' style={styles.card}>
-          <View style={styles.header}><Text style={styles.headerText}>{this.props.route.text}</Text></View>
-          <View style={styles.body}><Text style={styles.bodyText}>{this.props.route.desc}</Text></View>
+          <View style={styles.taskHeader}><Text style={styles.taskHeaderText}>{this.props.route.text}</Text></View>
+          <View style={styles.taskBody}><Text style={styles.taskBodyText}>{this.props.route.desc}</Text></View>
         </Image>
 
         {
@@ -128,12 +132,32 @@ module.exports = React.createClass({
         :
           <Text>Loading Subtasks...</Text>
         }
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item buttonColor='#9b59b6' title="New Subtask" onPress={() => console.log("notes tapped!")}>
+            <Icon name="android-create" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#3498db' title="" onPress={() => {}}>
+            <Icon name="android-notifications-none" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
+            <Icon name="android-done-all" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
+        </View>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: 'blueviolet'
+  },
+  navbar: {
+    backgroundColor: 'lightgreen'
+  },
   card: {
     borderWidth: 1,
     alignItems: 'center',
@@ -147,30 +171,35 @@ var styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
   },
-  header: {
+  body: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: 'deeppink'
+  },
+  taskHeader: {
     alignSelf: 'stretch',
     backgroundColor: 'rgba(0,0,0,0.35)',
     padding: 10,
   },
-  body: {
+  taskBody: {
     alignSelf: 'stretch',
     backgroundColor: 'rgba(0,0,0,0.35)',
     padding: 2,
   },
-  headerText: {
+  taskHeaderText: {
     alignSelf: 'center',
     fontSize: 20,
     color: 'whitesmoke',
   },
-  bodyText: {
+  taskBodyText: {
     justifyContent: 'flex-end',
     fontSize: 15,
     color: 'linen',
   },
-	container: {
-		backgroundColor: 'white',
-		flex: 1
-	},
+  swipeList: {
+    borderWidth: 2,
+    borderColor: 'orange'
+  },
 	backTextWhite: {
 		color: '#FFF'
 	},
@@ -179,7 +208,7 @@ var styles = StyleSheet.create({
 		backgroundColor: 'ghostwhite',
 		borderColor: 'gainsboro',
 		borderWidth: 1,
-    margin: 5,
+    margin: 4,
 		justifyContent: 'center',
 		height: 50,
 	},
@@ -201,12 +230,17 @@ var styles = StyleSheet.create({
 		width: 75
 	},
 	backRightBtnLeft: {
-		backgroundColor: 'blue',
+		backgroundColor: 'turquoise',
 		right: 0
 	},
 	backRightBtnRight: {
-		backgroundColor: 'red',
+		backgroundColor: 'tomato',
 		left: 0
-	}
+	},
+  actionButtonIcon: {
+  fontSize: 20,
+  height: 22,
+  color: 'white',
+},
 
 });
