@@ -2,6 +2,7 @@ var React = require('react-native');
 var {
   View,
   Text,
+  TextInput,
   Image,
   ListView,
   ScrollView,
@@ -10,7 +11,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-
+var Button = require('../common/button');
 var NavigationBar = require('react-native-navbar');
 import { SwipeListView } from 'react-native-swipe-list-view';
 var Parse = require('parse/react-native');
@@ -25,6 +26,10 @@ module.exports = React.createClass({
         subtasks: [],
         loaded: false,
         dataSource: ds.cloneWithRows([""]),
+        newSubtaskOpen: false,
+        newSubtaskName: '',
+        newSubtaskDesc: '',
+        newSubtaskImageURL: ''
     }
   },
 
@@ -64,6 +69,35 @@ module.exports = React.createClass({
       }
     });
   },
+  onNewSubtaskShow: function() {
+    this.setState({
+      newSubtaskOpen: !this.state.newSubtaskOpen
+    });
+    console.log(this.state.newSubtaskOpen);
+    console.log(this.state.newSubtaskName);
+  },
+  onNewSubtaskPress: function() {
+    var _this = this;
+    var task = this.props.route.taskRef;
+    task.className = "Task";
+    var parsetask = Parse.Object.fromJSON(task);
+    var Subtask = Parse.Object.extend("Subtask");
+    var newsubtask = new Subtask({"name":this.state.newSubtaskName, "desc":this.state.newSubtaskDesc,"imageURL":this.state.newSubtaskImageURL, "taskId":parsetask});
+    newsubtask.save(null, {
+      success: function(obj) {
+        alert('New object created with objectId: ' + obj.id);
+        _this.setState({
+          newSubtaskName: '',
+          newSubtaskDesc: '',
+          newSubtaskImageURL: '',
+          newSubtaskOpen: false
+        });
+      },
+      error: function(obj, error) {
+        alert('Failed to create new object, with error code: ' + error.message);
+      }
+    });
+  },
   render: function() {
     var _this = this;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -100,6 +134,34 @@ module.exports = React.createClass({
         </Image>
 
         {
+          this.state.newSubtaskOpen
+          ?
+          <View>
+            <Text style={styles.label}>Task Name:</Text>
+            <TextInput
+            style={styles.input}
+            value={this.state.newSubtaskName}
+            onChangeText={(text) => this.setState({newSubtaskName: text})}
+            />
+            <Text style={styles.label}>Task Desc:</Text>
+            <TextInput
+            style={styles.input}
+            value={this.state.newSubtaskDesc}
+            onChangeText={(text) => this.setState({newSubtaskDesc: text})}
+            />
+            <Text style={styles.label}>Task Image URL:</Text>
+            <TextInput
+            style={styles.input}
+            value={this.state.newSubtaskImageURL}
+            onChangeText={(text) => this.setState({newSubtaskImageURL: text})}
+            />
+            <Button text={'Create Subtask'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewSubtaskPress}/>
+          </View>
+          :
+          <Text></Text>
+        }
+
+        {
           this.state.loaded
           ?
         <SwipeListView
@@ -133,10 +195,10 @@ module.exports = React.createClass({
           <Text>Loading Subtasks...</Text>
         }
         <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#9b59b6' title="New Subtask" onPress={() => console.log("notes tapped!")}>
+          <ActionButton.Item buttonColor='#9b59b6' title="New Subtask" onPress={() => this.onNewSubtaskShow()}>
             <Icon name="android-create" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="" onPress={() => {}}>
+          <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => {}}>
             <Icon name="android-notifications-none" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => {}}>
@@ -242,5 +304,18 @@ var styles = StyleSheet.create({
   height: 22,
   color: 'white',
 },
-
+label: {
+  fontSize: 18,
+  color: 'gray'
+},
+input: {
+  padding: 4,
+  height: 40,
+  borderColor: 'gray',
+  borderWidth: 1,
+  borderRadius: 5,
+  margin: 5,
+  width: 200,
+  alignSelf: 'center'
+},
 });
