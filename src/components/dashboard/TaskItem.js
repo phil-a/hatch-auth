@@ -25,7 +25,6 @@ module.exports = React.createClass({
           <View style={styles.header}><Text style={styles.headerText}>{this.props.text}</Text></View>
           <View style={styles.body}><Text style={styles.bodyText}>{this.props.desc}</Text></View>
         </Image>
-        {console.log(this.props.taskRef)}
       </TouchableOpacity>
     );
   }
