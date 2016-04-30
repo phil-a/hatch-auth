@@ -8,10 +8,10 @@ var {
   ScrollView
 } = React;
 var Button = require('../common/button');
+import Icon from 'react-native-vector-icons/Ionicons';
 var Environment = require('../../config/environment')
 var Parse = require('parse/react-native');
 import TaskItem from './TaskItem';
-
 module.exports = React.createClass({
   getInitialState: function() {
     return {
@@ -106,10 +106,14 @@ module.exports = React.createClass({
                 onChangeText={(text) => this.setState({newTaskImageURL: text})}
                 />
                 <Button text={"Create <" + this.state.newTaskName + "> Task"} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewTaskPress}/>
-                <Button text={'Close New Task'} underlayColor={'rgba(200,0,0,0.25)'} onPress={this.onNewTaskShow}/>
+                <Icon.Button name="android-arrow-dropup-circle" backgroundColor="#aa5555" size={30} onPress={this.onNewTaskShow}>
+                <Text style={{fontFamily: 'Arial', fontSize: 20}}>Close Task Creation</Text>
+                </Icon.Button>
                 </View>
                 :
-                <Button text={'Open New Task'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewTaskShow}/>
+                <Icon.Button name="android-arrow-dropdown-circle" backgroundColor="#55aa55" size={30} onPress={this.onNewTaskShow}>
+                <Text style={{fontFamily: 'Arial', fontSize: 20}}>Open Task Creation</Text>
+                </Icon.Button>
               }
               {
               this.state.tasks.map(function(item, idx){

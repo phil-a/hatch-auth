@@ -29,7 +29,6 @@ module.exports = React.createClass({
         newSubtaskOpen: false,
         newSubtaskName: '',
         newSubtaskDesc: '',
-        newSubtaskImageURL: ''
     }
   },
 
@@ -82,7 +81,7 @@ module.exports = React.createClass({
     task.className = "Task";
     var parsetask = Parse.Object.fromJSON(task);
     var Subtask = Parse.Object.extend("Subtask");
-    var newsubtask = new Subtask({"name":this.state.newSubtaskName, "desc":this.state.newSubtaskDesc,"imageURL":this.state.newSubtaskImageURL, "taskId":parsetask});
+    var newsubtask = new Subtask({"name":this.state.newSubtaskName, "desc":this.state.newSubtaskDesc,"imageURL":this.state.newSubtaskImageURL, "taskId":parsetask, "completed":[] });
     newsubtask.save(null, {
       success: function(obj) {
         alert('New object created with objectId: ' + obj.id);
@@ -97,6 +96,31 @@ module.exports = React.createClass({
         alert('Failed to create new object, with error code: ' + error.message);
       }
     });
+  },
+  onCompletedPress(data){
+
+    //Retrieve subtask and update
+    var _this = this;
+    var indexToUpdate = null
+    this.state.subtasks.map(function(subtask, i) {
+      (subtask.name == data) ? indexToUpdate = i : null;
+    });
+    this.state.subtasks[indexToUpdate].completed.push(new Date());
+
+    //Update Subtask on parse server
+    var Subtask = Parse.Object.extend("Subtask");
+    var query = new Parse.Query(Subtask);
+    query.equalTo("objectId", _this.state.subtasks[indexToUpdate].objectId);
+    query.first({
+      success: function(object) {
+      object.set("completed", _this.state.subtasks[indexToUpdate].completed);
+      object.save();
+      console.log('Successfully updated subtask');
+    },
+      error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+});
   },
   render: function() {
     var _this = this;
@@ -137,23 +161,17 @@ module.exports = React.createClass({
           this.state.newSubtaskOpen
           ?
           <View>
-            <Text style={styles.label}>Task Name:</Text>
+            <Text style={styles.label}>Subtask Name:</Text>
             <TextInput
             style={styles.input}
             value={this.state.newSubtaskName}
             onChangeText={(text) => this.setState({newSubtaskName: text})}
             />
-            <Text style={styles.label}>Task Desc:</Text>
+            <Text style={styles.label}>Subtask Desc:</Text>
             <TextInput
             style={styles.input}
             value={this.state.newSubtaskDesc}
             onChangeText={(text) => this.setState({newSubtaskDesc: text})}
-            />
-            <Text style={styles.label}>Task Image URL:</Text>
-            <TextInput
-            style={styles.input}
-            value={this.state.newSubtaskImageURL}
-            onChangeText={(text) => this.setState({newSubtaskImageURL: text})}
             />
             <Button text={'Create Subtask'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewSubtaskPress}/>
           </View>
@@ -168,22 +186,22 @@ module.exports = React.createClass({
 					dataSource={this.state.dataSource}
 					renderRow={ data => (
 						<TouchableHighlight
-							onPress={ _ => console.log('You touched '+ data) }
+							onPress={ _ => alert('You touched '+ data) }
 							style={styles.rowFront}
 							underlayColor={'rgba(255,255,255,0.90)'}
 						>
 							<View>
-								<Text>I'm {data} in a SwipeListView</Text>
+								<Text>Do: {data} <Icon name="heart" size={20} color="black" /></Text>
 							</View>
 						</TouchableHighlight>
 					)}
 					renderHiddenRow={ (data, secId, rowId, rowMap) => (
 						<View style={styles.rowBack}>
-							<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={ _ => console.log(' You touched %c'+ data, 'background: #0000ff; color: #fff') }>
-								<Text style={styles.backTextWhite}>Right</Text>
+							<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={ _ => this.onCompletedPress(data) }>
+								<Text style={styles.backTextWhite}>D<Icon name="happy" size={15} color="white" />NE</Text>
 							</TouchableOpacity>
 							<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={  _ => console.log(' You touched %c'+ data, 'background: #ff0000; color: #fff') }>
-								<Text style={styles.backTextWhite}>Left</Text>
+                <Text style={styles.backTextWhite}>N<Icon name="sad-outline" size={15} color="white" />PE</Text>
 							</TouchableOpacity>
 						</View>
 					)}
@@ -303,19 +321,19 @@ var styles = StyleSheet.create({
   fontSize: 20,
   height: 22,
   color: 'white',
-},
-label: {
-  fontSize: 18,
-  color: 'gray'
-},
-input: {
-  padding: 4,
-  height: 40,
-  borderColor: 'gray',
-  borderWidth: 1,
-  borderRadius: 5,
-  margin: 5,
-  width: 200,
-  alignSelf: 'center'
-},
+  },
+  label: {
+    fontSize: 18,
+    color: 'gray'
+  },
+  input: {
+    padding: 4,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 5,
+    width: 200,
+    alignSelf: 'center'
+  },
 });
