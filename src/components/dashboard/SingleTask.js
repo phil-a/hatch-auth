@@ -17,6 +17,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 var Parse = require('parse/react-native');
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
+var moment = require('moment');
 
 module.exports = React.createClass({
 
@@ -97,8 +98,21 @@ module.exports = React.createClass({
       }
     });
   },
+  onSubtaskPress(data){
+    //Retrieve subtask
+    var indexRetrieved = null;
+    this.state.subtasks.map(function(subtask, i) {
+      (subtask.name == data) ? indexRetrieved = i : null;
+    });
+    alert(
+      'Total Completed: ' + this.state.subtasks[indexRetrieved].completed.length + "\n" +
+      'List: \n' +
+      this.state.subtasks[indexRetrieved].completed.map(function(date) {
+        return (moment(date).format('YYYY-MM-DD') + "\n");
+      })
+    );
+  },
   onCompletedPress(data){
-
     //Retrieve subtask and update
     var _this = this;
     var indexToUpdate = null
@@ -113,14 +127,14 @@ module.exports = React.createClass({
     query.equalTo("objectId", _this.state.subtasks[indexToUpdate].objectId);
     query.first({
       success: function(object) {
-      object.set("completed", _this.state.subtasks[indexToUpdate].completed);
-      object.save();
-      console.log('Successfully updated subtask');
-    },
+        object.set("completed", _this.state.subtasks[indexToUpdate].completed);
+        object.save();
+        console.log('Successfully updated subtask');
+      },
       error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
-    }
-});
+        alert("Error: " + error.code + " " + error.message);
+      }
+    });
   },
   render: function() {
     var _this = this;
@@ -186,7 +200,7 @@ module.exports = React.createClass({
 					dataSource={this.state.dataSource}
 					renderRow={ data => (
 						<TouchableHighlight
-							onPress={ _ => alert('You touched '+ data) }
+							onPress={ _ => this.onSubtaskPress(data) }
 							style={styles.rowFront}
 							underlayColor={'rgba(255,255,255,0.90)'}
 						>
