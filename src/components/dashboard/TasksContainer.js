@@ -17,6 +17,7 @@ module.exports = React.createClass({
     return {
       tasks: [],
       loaded: false,
+      newTaskOpen: false,
       newTaskName: '',
       newTaskDescription: '',
       newTaskImageURL: '',
@@ -50,6 +51,11 @@ module.exports = React.createClass({
       }
     });
   },
+  onNewTaskShow: function() {
+    this.setState({
+      newTaskOpen: !this.state.newTaskOpen
+    });
+  },
   onNewTaskPress: function() {
     var _this = this;
     var user = Parse.User.current();
@@ -68,43 +74,51 @@ module.exports = React.createClass({
         alert('Failed to create new object, with error code: ' + error.message);
       }
     });
-    this.getTasks();
   },
   render: function() {
     var _this = this;
     return (
       <ScrollView tabLabel="ios-checkmark" style={styles.tabView}>
-        <View></View>
           {
             this.state.loaded
             ?
             <View>
-            {
-            this.state.tasks.map(function(item, idx){
-              return (
-                <TaskItem key={idx} taskRef={item} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.props.navigator}/>
-              );
-            })
-            }
-            <Text style={styles.label}>Task Name:</Text>
-            <TextInput
-            style={styles.input}
-            value={this.state.newTaskName}
-            onChangeText={(text) => this.setState({newTaskName: text})}
-            />
-            <Text style={styles.label}>Task Desc:</Text>
-            <TextInput
-            style={styles.input}
-            value={this.state.newTaskDesc}
-            onChangeText={(text) => this.setState({newTaskDesc: text})}
-            />
-            <Text style={styles.label}>Task Image URL:</Text>
-            <TextInput
-            style={styles.input}
-            value={this.state.newTaskImageURL}
-            onChangeText={(text) => this.setState({newTaskImageURL: text})}
-            />
-            <Button text={'Create Task'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewTaskPress}/>
+              <View>
+              { this.state.newTaskOpen
+                ?
+                <View>
+                <Text style={styles.label}>Task Name:</Text>
+                <TextInput
+                style={styles.input}
+                value={this.state.newTaskName}
+                onChangeText={(text) => this.setState({newTaskName: text})}
+                />
+                <Text style={styles.label}>Task Desc:</Text>
+                <TextInput
+                style={styles.input}
+                value={this.state.newTaskDesc}
+                onChangeText={(text) => this.setState({newTaskDesc: text})}
+                />
+                <Text style={styles.label}>Task Image URL:</Text>
+                <TextInput
+                style={styles.input}
+                value={this.state.newTaskImageURL}
+                onChangeText={(text) => this.setState({newTaskImageURL: text})}
+                />
+                <Button text={"Create <" + this.state.newTaskName + "> Task"} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewTaskPress}/>
+                <Button text={'Close New Task'} underlayColor={'rgba(200,0,0,0.25)'} onPress={this.onNewTaskShow}/>
+                </View>
+                :
+                <Button text={'Open New Task'} underlayColor={'rgba(0,200,0,0.25)'} onPress={this.onNewTaskShow}/>
+              }
+              {
+              this.state.tasks.map(function(item, idx){
+                return (
+                  <TaskItem key={idx} taskRef={item} text={item.name} desc={item.desc} imageURL={item.imageURL} navigator={_this.props.navigator}/>
+                );
+              })
+              }
+              </View>
             </View>
             :
             <View>
