@@ -99,19 +99,18 @@ module.exports = React.createClass({
     });
   },
   onSubtaskPress(data){
-    //Retrieve subtask
-    var indexRetrieved = null;
-    this.state.subtasks.map(function(subtask, i) {
-      (subtask.name == data) ? indexRetrieved = i : null;
-    });
-    alert(
-      'Total Completed: ' + this.state.subtasks[indexRetrieved].completed.length + "\n" +
-      'List: \n' +
-      this.state.subtasks[indexRetrieved].completed.map(function(date) {
-        return (moment(date).format('YYYY-MM-DD') + "\n");
-      })
-    );
-  },
+      //Retrieve subtask
+      var _this = this;
+      var indexRetrieved = null;
+      this.state.subtasks.map(function(subtask, i) {
+        (subtask.name == data) ? indexRetrieved = i : null;
+      });
+      // Push new navigator view
+      this.props.navigator.push({
+        name: 'singlesubtask',
+        subtask: this.state.subtasks[indexRetrieved]
+      });
+    },
   onCompletedPress(data){
     //Retrieve subtask and update
     var _this = this;

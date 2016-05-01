@@ -10,12 +10,13 @@ var Signin = require('./components/authentication/signin');
 var Signup = require('./components/authentication/signup');
 var Dashboard = require('./components/dashboard/dashboard');
 var SingleTask = require('./components/dashboard/SingleTask');
-
+var SingleSubtask = require('./components/dashboard/SingleSubtask');
 var ROUTES = {
   signin: Signin,
   signup: Signup,
   dashboard: Dashboard,
-  singletask: SingleTask
+  singletask: SingleTask,
+  singlesubtask: SingleSubtask
 };
 
 module.exports = React.createClass({
