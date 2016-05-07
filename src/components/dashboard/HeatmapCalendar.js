@@ -60,10 +60,14 @@ module.exports = React.createClass({
   },
 
   formatDate: function(date) {
-    return date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+    ];
+    return date.getFullYear()+'-' +  monthNames[date.getMonth()] + '-'+date.getDate();
   },
 
   render: function() {
+    var _this = this;
     return (
       <View style={styles.container}>
         <View style={styles.row}>
@@ -72,7 +76,7 @@ module.exports = React.createClass({
           ?
           this.state.displayObj.map(function(d, idx) {
             return (
-              <TouchableHighlight onPress={ _ => alert("click dateUnit") } key={idx} style={[styles.square, {backgroundColor: 'rgba(0,200,200,'+d.count*0.1+')'}]} underlayColor={'rgba(200,0,0,0.75)'}>
+              <TouchableHighlight onPress={ _ => alert("Date: " + _this.formatDate(d.date) + "\nCount: " + d.count) } key={idx} style={[styles.square, {backgroundColor: 'rgba(0,200,200,'+d.count*0.1+')'}]} underlayColor={'rgba(200,0,0,0.75)'}>
                 <View/>
               </TouchableHighlight>
             );
