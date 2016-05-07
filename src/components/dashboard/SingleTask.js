@@ -118,7 +118,7 @@ module.exports = React.createClass({
     this.state.subtasks.map(function(subtask, i) {
       (subtask.name == data) ? indexToUpdate = i : null;
     });
-    this.state.subtasks[indexToUpdate].completed.push(new Date());
+    this.state.subtasks[indexToUpdate].completed.push(Date.now());
 
     //Update Subtask on parse server
     var Subtask = Parse.Object.extend("Subtask");

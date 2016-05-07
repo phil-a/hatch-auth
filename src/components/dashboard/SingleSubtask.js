@@ -8,8 +8,12 @@ var {
 
 var NavigationBar = require('react-native-navbar');
 var moment = require('moment');
+var HeatmapCalendar = require('./HeatmapCalendar');
 
 module.exports = React.createClass({
+  getDateFromMs: function(ms) {
+    return new Date(ms);
+  },
   render: function() {
     var _this = this;
 
@@ -36,10 +40,10 @@ module.exports = React.createClass({
           <Text>Total Done: {this.props.route.subtask.completed.length}</Text>
           {
             this.props.route.subtask.completed.map(function(date, idx) {
-              return <Text key={idx}>{ moment(date).format('YY-MM-DD') }</Text>
+              return <Text key={idx}>{_this.getDateFromMs(date).toString()}</Text>
             })
           }
-          { console.log(this.props.route.subtask) }
+          <HeatmapCalendar completed={this.props.route.subtask.completed}/>
         </ScrollView>
       </View>
     );
