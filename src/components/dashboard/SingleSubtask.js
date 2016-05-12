@@ -35,14 +35,14 @@ module.exports = React.createClass({
           leftButton={leftButtonConfig}
         />
         <ScrollView style={styles.body}>
-          <Text>Name: {this.props.route.subtask.name}</Text>
+          {/*<Text>Name: {this.props.route.subtask.name}</Text>
           <Text>Description: {this.props.route.subtask.desc}</Text>
           <Text>Total Done: {this.props.route.subtask.completed.length}</Text>
           {
             this.props.route.subtask.completed.map(function(date, idx) {
               return <Text key={idx}>{_this.getDateFromMs(date).toString()}</Text>
             })
-          }
+          }*/}
           <HeatmapCalendar completed={this.props.route.subtask.completed}/>
         </ScrollView>
       </View>
@@ -58,6 +58,7 @@ var styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+    flexDirection: 'row',
     borderWidth: 2,
     borderColor: 'deeppink'
   }

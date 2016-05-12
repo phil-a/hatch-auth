@@ -24,7 +24,6 @@ module.exports = React.createClass({
   componentDidMount: function() {
     var displayObj = this.dateCalculations();
     this.setState({ displayObj: displayObj}, function() {
-      console.log(displayObj);
     });
   },
 
@@ -33,7 +32,7 @@ module.exports = React.createClass({
     if (this.props.completed.length !== 0){
       var lastCompleted = this.getDateFromMs(this.props.completed[this.props.completed.length-1])
       var lastThirtyDays = [];
-      for (var i=0; i<30; i++){
+      for (var i=0; i<77; i++){
         //create array of last 30 days
         var d = new Date();
         var count = 0;
@@ -66,21 +65,50 @@ module.exports = React.createClass({
     return date.getFullYear()+'-' +  monthNames[date.getMonth()] + '-'+date.getDate();
   },
 
-  render: function() {
+  getWeek: function(date) {
+      var onejan = new Date(date.getFullYear(), 0, 1);
+      return Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+  },
+  checkPrev: function(_this, prev, current) {
+    if (prev != current) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+  renderLastThirtyDays: function() {
     var _this = this;
+    var prev = null;
+    return(
+      this.state.displayObj.map(function(d, idx) {
+        if (_this.checkPrev(_this, prev, _this.getWeek(d.date))) {
+          prev = _this.getWeek(d.date)
+          return (
+            <TouchableHighlight onPress={ _ => alert("Date: " + _this.formatDate(d.date) + "\nCount: " + d.count + "\nWeek: " + _this.getWeek(d.date)) } key={idx} style={[styles.square, {backgroundColor: 'rgba(0,200,200,'+d.count*0.1+')'}]} underlayColor={'rgba(200,0,0,0.75)'}>
+              <Text>T{d.date.getDate()}</Text>
+            </TouchableHighlight>
+          );
+        } else {
+          prev = _this.getWeek(d.date)
+          return (
+            <TouchableHighlight onPress={ _ => alert("Date: " + _this.formatDate(d.date) + "\nCount: " + d.count + "\nWeek: " + _this.getWeek(d.date)) } key={idx} style={[styles.square, {backgroundColor: 'rgba(0,200,200,'+d.count*0.1+')'}]} underlayColor={'rgba(200,0,0,0.75)'}>
+              <Text>F{d.date.getDate()}</Text>
+            </TouchableHighlight>
+          );
+        }
+
+      })
+    );
+  },
+
+  render: function() {
     return (
       <View style={styles.container}>
         <View style={styles.row}>
         {
           (this.props.completed.length !== 0)
           ?
-          this.state.displayObj.map(function(d, idx) {
-            return (
-              <TouchableHighlight onPress={ _ => alert("Date: " + _this.formatDate(d.date) + "\nCount: " + d.count) } key={idx} style={[styles.square, {backgroundColor: 'rgba(0,200,200,'+d.count*0.1+')'}]} underlayColor={'rgba(200,0,0,0.75)'}>
-                <View/>
-              </TouchableHighlight>
-            );
-          })
+          this.renderLastThirtyDays()
           :
           <Text>Nothing</Text>
         }
@@ -103,16 +131,16 @@ var styles = StyleSheet.create({
     borderColor: 'deeppink'
   },
   row: {
+    flexWrap: 'wrap',
     borderWidth: 1,
     borderColor: 'red',
-    alignItems: 'flex-end',
   },
   square: {
     borderWidth: 1,
     borderColor: 'orange',
     backgroundColor: 'lightgray',
-    width: 30,
-    height: 30
+    width: 50,
+    height: 50
   },
   currentSquare: {
     backgroundColor: 'orange'
